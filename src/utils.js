@@ -19,6 +19,16 @@ export const validKeys = (entry) => Object
   .keys(entry)
   .filter((key) => entry[key] !== undefined && entry[key] !== null)
 
+export const nullSafeObject = (object = {}) => {
+  const internal = assign({}, object)
+
+  Object
+    .keys(internal)
+    .forEach((key) => (internal[key] === undefined || internal[key] === null) && delete internal[key])
+
+  return internal
+}
+
 export const buildRecursive = (key, value, suffix) => {
   suffix = suffix || ''
   const isArray = Array.isArray(value)

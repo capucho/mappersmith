@@ -6,7 +6,8 @@ import {
   lowerCaseObjectKeys,
   performanceNow,
   isPlainObject,
-  btoa
+  btoa,
+  nullSafeObject
 } from 'src/utils'
 
 describe('utils', () => {
@@ -113,6 +114,33 @@ describe('utils', () => {
       function Custom () {}
       expect(isPlainObject(new Custom())).toEqual(false)
       expect(isPlainObject({ plain: true })).toEqual(true)
+    })
+  })
+
+  describe('#nullSafeObject', () => {
+    it('returns an object with the same values if no key has a null or undefined value', () => {
+      const obj = { ABC: 1, DeF: 2, ghI: 3 }
+      expect(nullSafeObject(obj)).toEqual(obj)
+    })
+
+    it('returns an object without the keys with null values', () => {
+      const obj = { ABC: 1, DeF: 2, ghI: null }
+      const expectedObj = { ABC: 1, DeF: 2 }
+      expect(nullSafeObject(obj)).toEqual(expectedObj)
+    })
+
+    it('returns an object without the keys with undefined values', () => {
+      const obj = { ABC: 1, DeF: 2, ghI: undefined }
+      const expectedObj = { ABC: 1, DeF: 2 }
+      expect(nullSafeObject(obj)).toEqual(expectedObj)
+    })
+
+    it('returns an empty object if argument is null', () => {
+      expect(nullSafeObject(null)).toEqual({})
+    })
+
+    it('returns an empty object if argument is undefined', () => {
+      expect(nullSafeObject(undefined)).toEqual({})
     })
   })
 
